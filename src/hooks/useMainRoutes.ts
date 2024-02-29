@@ -1,13 +1,17 @@
 const useMainRoutes = () => {
-    const createRoute = (path?: string) => `/home/${path ? "/" + path : ""}`;
+    const createRoute = (path?: string) => `/dashboard/${path ? "/" + path : ""}`;
 
-    const routes = [
+    const dashboardRoutes = [
         {
-            text: "BASE",
+            text: "Dashboard",
             path: createRoute(),
+        },
+        {
+            text: "Carteira",
+            path: createRoute("wallet"),
         }
     ]
-    return routes;
+    return dashboardRoutes;
 }
 
 export default useMainRoutes();

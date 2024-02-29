@@ -1,52 +1,45 @@
+"use client"
 import React from "react";
 import { observer } from "mobx-react-lite"
-import { Box, Button, Divider, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, } from "@mui/material";
+import { Box, Button, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, } from "@mui/material";
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 
-export const NavbarContent = observer(() => {
-    const [isOpen, setIsOpen] = React.useState<boolean>(false);
+import useMainRoutes from "@/hooks/useMainRoutes";
 
-    const toggleDrawer = (newOpen: boolean) => () => {
-        setIsOpen(newOpen);
-      };
-    
-      const DrawerList = (
-        <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
-          <List>
-            {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-              <ListItem key={text} disablePadding>
-                <ListItemButton>
-                  <ListItemIcon>
-                    {index % 2 === 0 ? <InboxIcon/> : <MailIcon />}
-                  </ListItemIcon>
-                  <ListItemText primary={text} />
-                </ListItemButton>
-              </ListItem>
-            ))}
-          </List>
-          <Divider />
-          <List>
-            {['All mail', 'Trash', 'Spam'].map((text, index) => (
-              <ListItem key={text} disablePadding>
-                <ListItemButton>
-                  <ListItemIcon>
-                    {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                  </ListItemIcon>
-                  <ListItemText primary={text} />
-                </ListItemButton>
-              </ListItem>
-            ))}
-          </List>
-        </Box>
-      );
+export const NavbarContent = observer(({isOpen, setIsOpen}: {
+  isOpen: boolean,
+  setIsOpen: (newOpen: boolean)=> void;
+}) => {
 
-    return (
-        <>
-            <Button onClick={toggleDrawer(true)}>Open drawer</Button>
-            <Drawer open={isOpen} onClose={toggleDrawer(false)}>
-                {DrawerList}
-            </Drawer>
-        </>
-    )
+  const mainRoutes = useMainRoutes
+
+  const toggleDrawer = (newOpen: boolean) => () => {
+    setIsOpen(newOpen);
+  };
+
+  const DrawerList = (
+    <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
+      <List>
+        {mainRoutes.map((route, index) => (
+          <ListItem key={route.text} disablePadding>
+            <ListItemButton href={route.path} >
+              <ListItemIcon>
+                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+              </ListItemIcon>
+              <ListItemText primary={route.text} />
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
+    </Box>
+  );
+
+  return (
+    <>
+      <Drawer open={isOpen} onClose={toggleDrawer(false)}>
+        {DrawerList}
+      </Drawer>
+    </>
+  )
 })
