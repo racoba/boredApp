@@ -1,7 +1,6 @@
 import { makeAutoObservable } from "mobx";
 
 import strings from "@/resources/strings";
-import { BRAPIAsset } from "@/models";
 import { getAsset } from "@/services/AssetsService";
 
 export default class Store {
@@ -15,10 +14,15 @@ export default class Store {
     }
 
     public getAsset = async (quotes: string[]) => {
-        this.assets = await getAsset(quotes);
+        try{
+            this.assets = await getAsset(quotes);
+            console.log(this.assets);
+        } catch (e){
+            console.log(e);
+        }
     }
 
     public fetch = async () => {
-        await this.getAsset(this.quotes)
+        await this.getAsset(this.quotes);
     }
 }

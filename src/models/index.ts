@@ -1,2 +1,2 @@
-export type { Asset } from "./Assets"
-export type { BRAPIAsset } from "./BRAPIAsset"
+export type { IAsset } from "./Assets"
+export type { IUser, ICreateUser, IUserInfo } from "./User"

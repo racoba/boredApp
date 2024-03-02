@@ -1,17 +1,13 @@
 import axios from "axios";
-import { BRAPIAsset } from "@/models/index"
 
 export const getAsset = async (quote: string[]): Promise<any> => {
-    const url = `https://brapi.dev/api/quote/${quote}?token=fHiYu4SNhgs5SgyMRUifwB`;
+    const baseUrl = "https://core.gorila.com.br";
+    const key = "3SUH641QUKARKMEN"
+
     try {
-        const response = await axios.get(url);
-        const responseData = response.data;
-        return responseData;
-        // return {
-        //     currentPrice: responseData.regularMarketPrice,
-        //     variation: responseData.regularMarketChange,
-        //     symbol: responseData.symbol
-        // };
+        // const response = await axios.get(`${baseUrl}/securities?${authorization}`);
+        // const responseData = response.data;
+        // return responseData;
     } catch (error) {
         console.error("Error fetching asset:", error);
         throw error;
