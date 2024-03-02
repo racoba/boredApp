@@ -1,31 +1,24 @@
-// import { makeAutoObservable } from "mobx";
+import { makeAutoObservable } from "mobx";
 
-// class B3Store {
-//   constructor() {
-//     // define and init observables
-//     this.stocks = [];
-//     this.searchParam = "";
-//     makeAutoObservable(this);
-//   }
+import strings from "@/resources/strings";
+import { BRAPIAsset } from "@/models";
+import { getAsset } from "@/services/AssetsService";
 
-//   setSearchParam = (param) => {
-//     this.searchParam = param;
-//   };
+export default class Store {
 
-//   setBooks = (books) => (this.books = books);
+    public quotes: string[];
+    public assets: any[] | null = null
 
-//   get filteredBooks() {
-//     return this.books.filter((book) =>
-//       book.title.toLowerCase().includes(this.searchParam.toLowerCase())
-//     );
-//   }
+    constructor(quotes: string[]) {
+        this.quotes = quotes;
+        makeAutoObservable(this);
+    }
 
-//   // special method for demonstration
-//   fetchAndSetBooksOnClient = async () => {
-//     const newBooks = await Promise.resolve([...books, ...clientBooks]);
-//     console.log(newBooks);
-//     this.setBooks(newBooks);
-//   };
-// }
+    public getAsset = async (quotes: string[]) => {
+        this.assets = await getAsset(quotes);
+    }
 
-// export default B3Store
+    public fetch = async () => {
+        await this.getAsset(this.quotes)
+    }
+}

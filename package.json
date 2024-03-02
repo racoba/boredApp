@@ -13,6 +13,7 @@
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.15.11",
     "@mui/material": "^5.15.11",
+    "axios": "^1.6.7",
     "localized-strings": "^0.2.4",
     "mobx": "^6.12.0",
     "mobx-react-lite": "^4.0.5",

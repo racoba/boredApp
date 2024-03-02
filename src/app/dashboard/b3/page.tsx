@@ -1,57 +1,32 @@
+"use client"
 import React from "react";
 import { Grid } from "@mui/material";
+import { observer, useLocalObservable } from "mobx-react-lite";
 
 import { StockCard } from "@/components";
+import Store from "./store"
 
 const mockedData = [
-    {
-        abbreviation: "BBAS3",
-        value: 60,
-        variation: 5
-    },
-    {
-        abbreviation: "TASA4",
-        value: 14.4,
-        variation: 25
-    },
-    {
-        abbreviation: "HGLG11",
-        value: 170,
-        variation: -30
-    },
-    {
-        abbreviation: "BBAS3",
-        value: 60,
-        variation: 5
-    },
-    {
-        abbreviation: "TASA4",
-        value: 14.4,
-        variation: 25
-    },
-    {
-        abbreviation: "HGLG11",
-        value: 170,
-        variation: -30
-    },
-    {
-        abbreviation: "BBAS3",
-        value: 60,
-        variation: 5
-    },
-    {
-        abbreviation: "TASA4",
-        value: 14.4,
-        variation: 25
-    },
-    {
-        abbreviation: "HGLG11",
-        value: 170,
-        variation: -30
-    },
+    "BBAS3",
+    // "TASA4",
+    // "HGLG11",
+    // "BBAS3",
+    // "TASA4",
+    // "HGLG11",
+    // "BBAS3",
+    // "TASA4",
+    // "HGLG11",
 ]
 
+
+
 const B3 = () => {
+    const store = useLocalObservable(() => new Store(mockedData));
+
+    React.useEffect(() => {
+        store.fetch()
+    }, [])
+
     return (
         <Grid marginTop={2}>
             <Grid
@@ -61,15 +36,15 @@ const B3 = () => {
                 justifyContent="center"
                 spacing={4}
             >
-                {mockedData.map((stock) => (
+                {store.assets ? store.assets.map((stock) => (
                     <Grid item>
-                        <StockCard props={{ ...stock }} />
+                        <StockCard props={{ abbreviation: stock?.symbol, value: stock?.regularMarketPrice, variation: stock?.regularMarketChange }} />
                     </Grid>
-                ))}
+                )) : null}
             </Grid>
         </Grid>
     )
 }
 
 
-export default B3;
+export default observer(B3);
