@@ -8,224 +8,233 @@ interface IHandleResponse {
 	onError: (e: string) => void;
 }
 
+interface IForm {
+	email: string;
+	password: string;
+}
+
 export default class AuthStore {
 
-	public receivedToken = "";
-	public currentUser: IUser | null = null;
+	// 	public receivedToken = "";
+	// 	public currentUser: IUser | null = null;
+	public form: IForm = { email: "", password: "" };
+	// 	private localstorage_key = "wallet-api_currentUser";
 
-	private localstorage_key = "wallet-api_currentUser";
-
-	
+	public setForm = (newEmail?: string, newPassword?: string) => {
+		if (newEmail) this.form.email = newEmail;
+		if (newPassword) this.form.password = newPassword;
+	}
 
 	constructor() {
 		makeAutoObservable(this);
 	}
 
-	public login = async () => {
-		try {
-			await authService.login("", "");
-		} catch (e) {
-            console.log(e)
-		} 
-	};
+		public login = async () => {
+			try {
+				console.log(this.form)
+				// await authService.login(this.form.email, this.form.password);
+			} catch (e) {
+	            console.log(e)
+			} 
+		};
 
-	public getCurrentnUser = async () => {
-		const currentUserJson = this.getCurrentUserLocalStorage();
+	// 	public getCurrentnUser = async () => {
+	// 		const currentUserJson = this.getCurrentUserLocalStorage();
 
-		try {
-			if (!currentUserJson) {
-				throw new Error("User is not logged");
-			}
+	// 		try {
+	// 			if (!currentUserJson) {
+	// 				throw new Error("User is not logged");
+	// 			}
 
-			const currentUser = await api.getCurrentAdminLogged(JSON.parse(currentUserJson));
-			this.setCurrentUser(currentUser);
-		} catch (e) {
-			console.log(e)
-		} 
-	};
-
-	
-
-	public isLogged = async () => {
-
-		try {
-			const resultUser = await api.getCurrentAdminLogged();
-			this.setCurrentAdminUser(resultUser);
-		} catch (e) {
-			localStorage.clear();
-		} 
-
-		return !!this.currentUser;
-	};
-	
-	public authenticate = async (
-		onSuccess: () => void = () => { },
-		onFail: () => void = () => { },
-	) => {
-		if (!(await this.isLogged())) {
-			onFail();
-		} else {
-			onSuccess();
-		}
-	};
+	// 			const currentUser = await api.getCurrentAdminLogged(JSON.parse(currentUserJson));
+	// 			this.setCurrentUser(currentUser);
+	// 		} catch (e) {
+	// 			console.log(e)
+	// 		} 
+	// 	};
 
 
-	public setCurrentUser = (user: IUser | null) => {
-		this.currentUser = user;
-		if (!user) {
-			this.removeFromLocalStorage();
-			return;
-		}
 
-		this.saveOnLocalStorage();
-	};
+	// 	public isLogged = async () => {
 
-	public logout = async () => {
-		try {
-			await api.logoutAdminUser();
-			this.setCurrentUser(null);
-		} catch (e) {
-			console.log(e);
-		} 
-	};
+	// 		try {
+	// 			const resultUser = await api.getCurrentAdminLogged();
+	// 			this.setCurrentAdminUser(resultUser);
+	// 		} catch (e) {
+	// 			localStorage.clear();
+	// 		} 
 
-	public validateToken = async (onSuccess: (message: string) => void, onError: (e: string) => void) => {
-		this.form.fieldError.clearErrors();
-		const data = this.form.getValues();
-		if (this.loader.isLoading) {
-			return;
-		}
+	// 		return !!this.currentUser;
+	// 	};
 
-		this.loader.start();
+	// 	public authenticate = async (
+	// 		onSuccess: () => void = () => { },
+	// 		onFail: () => void = () => { },
+	// 	) => {
+	// 		if (!(await this.isLogged())) {
+	// 			onFail();
+	// 		} else {
+	// 			onSuccess();
+	// 		}
+	// 	};
 
-		try {
-			const resultValidate = await api.validateToken(data.token);
 
-			if (resultValidate) {
-				runInAction(() => {
-					this.receivedToken = data.token;
-				});
-			}
-			onSuccess(strings.recoveryPage.validToken);
-		} catch (e) {
-			const errors = Errors.handleError(e);
-			this.form.fieldError.addError({
-				message: errors,
-				field: "token",
-			});
-			onError(e.message);
-		} finally {
-			this.loader.end();
-		}
-	};
+	// 	public setCurrentUser = (user: IUser | null) => {
+	// 		this.currentUser = user;
+	// 		if (!user) {
+	// 			this.removeFromLocalStorage();
+	// 			return;
+	// 		}
 
-	public validateTokenUrl = async (
-		onSuccess: () => void,
-		onError: () => void,
-		token: string,
-	) => {
-		this.form.fieldError.clearErrors();
-		if (this.loader.isLoading) {
-			return;
-		}
+	// 		this.saveOnLocalStorage();
+	// 	};
 
-		this.loader.start();
+	// 	public logout = async () => {
+	// 		try {
+	// 			await api.logoutAdminUser();
+	// 			this.setCurrentUser(null);
+	// 		} catch (e) {
+	// 			console.log(e);
+	// 		} 
+	// 	};
 
-		try {
-			const resultValidateUrl = await api.validateToken(token);
-			if (resultValidateUrl) {
-				runInAction(() => (this.receivedToken = token));
-			}
+	// 	public validateToken = async (onSuccess: (message: string) => void, onError: (e: string) => void) => {
+	// 		this.form.fieldError.clearErrors();
+	// 		const data = this.form.getValues();
+	// 		if (this.loader.isLoading) {
+	// 			return;
+	// 		}
 
-			onSuccess();
-		} catch (e) {
-			onError();
-		} finally {
-			this.loader.end();
-		}
-	};
+	// 		this.loader.start();
 
-	public setToken = (token: string) => {
-		runInAction(() => (this.receivedToken = token));
-	};
+	// 		try {
+	// 			const resultValidate = await api.validateToken(data.token);
 
-	public resetPassword = async (onSuccess: () => void, onError: (e: string) => void) => {
-		this.form.fieldError.clearErrors();
+	// 			if (resultValidate) {
+	// 				runInAction(() => {
+	// 					this.receivedToken = data.token;
+	// 				});
+	// 			}
+	// 			onSuccess(strings.recoveryPage.validToken);
+	// 		} catch (e) {
+	// 			const errors = Errors.handleError(e);
+	// 			this.form.fieldError.addError({
+	// 				message: errors,
+	// 				field: "token",
+	// 			});
+	// 			onError(e.message);
+	// 		} finally {
+	// 			this.loader.end();
+	// 		}
+	// 	};
 
-		if (this.loader.isLoading) {
-			return;
-		}
+	// 	public validateTokenUrl = async (
+	// 		onSuccess: () => void,
+	// 		onError: () => void,
+	// 		token: string,
+	// 	) => {
+	// 		this.form.fieldError.clearErrors();
+	// 		if (this.loader.isLoading) {
+	// 			return;
+	// 		}
 
-		this.loader.start();
+	// 		this.loader.start();
 
-		try {
-			const data = this.form.getValues();
-			if (data.newPassword !== data.confirmNewPassword) {
-				this.form.fieldError.addError({
-					message: strings.recoveryPage.samePasswordError,
-					field: "password",
-				});
-				this.form.fieldError.addError({
-					message: strings.recoveryPage.samePasswordError,
-					field: "confirmNewPassword",
-				});
-			} else {
-				await api.resetPassword(this.receivedToken, data.newPassword);
-				runInAction(() => {
-					data.password = data.newPassword;
-				});
-				this.login();
-				this.clear();
-				onSuccess();
-			}
-		} catch (e) {
-			const error = JSON.parse(e.message);
-			onError(error.message);
-		} finally {
-			this.loader.end();
-		}
-	};
+	// 		try {
+	// 			const resultValidateUrl = await api.validateToken(token);
+	// 			if (resultValidateUrl) {
+	// 				runInAction(() => (this.receivedToken = token));
+	// 			}
 
-	public sendNewPassword = async (onSuccess: () => void, onError: (e: string) => void) => {
-		this.form.fieldError.clearErrors();
-		const data = this.form.getValues();
-		this.loader.start();
+	// 			onSuccess();
+	// 		} catch (e) {
+	// 			onError();
+	// 		} finally {
+	// 			this.loader.end();
+	// 		}
+	// 	};
 
-		try {
-			await api.sendRequestResetPassword(data.email);
-			onSuccess();
-		} catch (e) {
-			const errors = Errors.handleError(e);
-			this.form.fieldError.addError({
-				message: errors,
-				field: "email",
-			});
-			onError(e.message);
-		} finally {
-			this.loader.end();
-		}
-	};
+	// 	public setToken = (token: string) => {
+	// 		runInAction(() => (this.receivedToken = token));
+	// 	};
 
-	private clear = () => {
-		const data = this.form.getValues();
-		runInAction(() => {
-			data.email = "";
-			data.password = "";
-			this.receivedToken = "";
-			data.token = "";
-		});
-	};
+	// 	public resetPassword = async (onSuccess: () => void, onError: (e: string) => void) => {
+	// 		this.form.fieldError.clearErrors();
 
-	public getCurrentAdminUserLocalStorage = () => {
-		const currentAdminUserString = localStorage.getItem(this.localstorage_key);
-		return currentAdminUserString;
-	};
+	// 		if (this.loader.isLoading) {
+	// 			return;
+	// 		}
 
-	public saveOnLocalStorage = () => {
-		localStorage.setItem(this.localstorage_key, JSON.stringify(this.currentAdminUser));
-	};
+	// 		this.loader.start();
 
-	public removeFromLocalStorage = () => {
-		localStorage.removeItem(this.localstorage_key);
-	};
+	// 		try {
+	// 			const data = this.form.getValues();
+	// 			if (data.newPassword !== data.confirmNewPassword) {
+	// 				this.form.fieldError.addError({
+	// 					message: strings.recoveryPage.samePasswordError,
+	// 					field: "password",
+	// 				});
+	// 				this.form.fieldError.addError({
+	// 					message: strings.recoveryPage.samePasswordError,
+	// 					field: "confirmNewPassword",
+	// 				});
+	// 			} else {
+	// 				await api.resetPassword(this.receivedToken, data.newPassword);
+	// 				runInAction(() => {
+	// 					data.password = data.newPassword;
+	// 				});
+	// 				this.login();
+	// 				this.clear();
+	// 				onSuccess();
+	// 			}
+	// 		} catch (e) {
+	// 			const error = JSON.parse(e.message);
+	// 			onError(error.message);
+	// 		} finally {
+	// 			this.loader.end();
+	// 		}
+	// 	};
+
+	// 	public sendNewPassword = async (onSuccess: () => void, onError: (e: string) => void) => {
+	// 		this.form.fieldError.clearErrors();
+	// 		const data = this.form.getValues();
+	// 		this.loader.start();
+
+	// 		try {
+	// 			await api.sendRequestResetPassword(data.email);
+	// 			onSuccess();
+	// 		} catch (e) {
+	// 			const errors = Errors.handleError(e);
+	// 			this.form.fieldError.addError({
+	// 				message: errors,
+	// 				field: "email",
+	// 			});
+	// 			onError(e.message);
+	// 		} finally {
+	// 			this.loader.end();
+	// 		}
+	// 	};
+
+	// 	private clear = () => {
+	// 		const data = this.form.getValues();
+	// 		runInAction(() => {
+	// 			data.email = "";
+	// 			data.password = "";
+	// 			this.receivedToken = "";
+	// 			data.token = "";
+	// 		});
+	// 	};
+
+	// 	public getCurrentAdminUserLocalStorage = () => {
+	// 		const currentAdminUserString = localStorage.getItem(this.localstorage_key);
+	// 		return currentAdminUserString;
+	// 	};
+
+	// 	public saveOnLocalStorage = () => {
+	// 		localStorage.setItem(this.localstorage_key, JSON.stringify(this.currentAdminUser));
+	// 	};
+
+	// 	public removeFromLocalStorage = () => {
+	// 		localStorage.removeItem(this.localstorage_key);
+	// 	};
 }
