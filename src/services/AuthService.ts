@@ -1,10 +1,10 @@
 import axios from "axios";
 import { environment } from "../../environment";
-import { IUser } from "@/models";
+import { ICreateUser, IUser } from "@/models";
 
 const baseUrl = `${environment.baseUrl}/auth/`;
 
-export const register = async (createdUser: IUser) => {
+export const register = async (createdUser: ICreateUser) => {
     try {
         const response = await axios.post(baseUrl + "register", createdUser);
         return response.data;

@@ -1,14 +1,20 @@
 "use client"
 import { Box, Button, Grid, TextField } from "@mui/material";
 import { observer, useLocalObservable } from "mobx-react-lite";
+import { useRouter } from "next/navigation";
 import AuthStore from "@/stores/AuthStore";
 
 const Login = ({ children }: { children: React.ReactNode }) => {
 
     const authStore = useLocalObservable(() => new AuthStore());
+    const router = useRouter();
 
     const onClickLogin = async () => {
         await authStore.login();
+    }
+    const onClickRegister = async () => {
+        authStore.resetForm();
+        router.push("/register")
     }
 
     return (
@@ -26,30 +32,47 @@ const Login = ({ children }: { children: React.ReactNode }) => {
                 justifyContent="center"
                 borderRadius={8}
             >
-                <form autoComplete="off">
-                    <TextField
-                        required
-                        type="email"
-                        label="Email"
-                        variant="standard"
-                        value={authStore.form?.email}
-                        onChange={(e) => authStore.setForm(e.target.value, undefined)}
-                        style={{ width: 400 }}
-                    />
+                LOGIN
+                <TextField
+                    required
+                    type="email"
+                    label="Email"
+                    variant="standard"
+                    value={authStore.form?.email}
+                    onChange={(e) => authStore.setForm(e.target.value, undefined)}
+                    style={{ width: 400 }}
+                />
 
-                    <TextField
-                        required
-                        type="password"
-                        label="Password"
-                        variant="standard"
-                        value={authStore.form?.password}
-                        onChange={(e) => authStore.setForm(undefined, e.target.value)}
-                        style={{ width: 400, marginTop: 15 }}
-                    />
-                    <Button onClick={() => onClickLogin()}>
+                <TextField
+                    required
+                    type="password"
+                    label="Password"
+                    variant="standard"
+                    value={authStore.form?.password}
+                    onChange={(e) => authStore.setForm(undefined, e.target.value)}
+                    style={{ width: 400, marginTop: 15 }}
+                />
+                <Box
+                    display="flex"
+                    flexDirection="row"
+                    justifyContent="space-around"
+                    width={230}
+                >
+                    <Button
+                        onClick={() => onClickRegister()}
+                        variant="outlined"
+                        style={{ color: "black", borderColor: "black", marginTop: 30 }}
+                    >
+                        Register
+                    </Button>
+                    <Button
+                        onClick={() => onClickLogin()}
+                        variant="contained"
+                        style={{ backgroundColor: "black", marginTop: 30 }}
+                    >
                         Login
                     </Button>
-                </form>
+                </Box>
             </Grid>
         </Box>
 

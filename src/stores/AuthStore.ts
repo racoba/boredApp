@@ -11,13 +11,14 @@ interface IHandleResponse {
 interface IForm {
 	email: string;
 	password: string;
+	username?: string;
 }
 
 export default class AuthStore {
 
 	// 	public receivedToken = "";
 	// 	public currentUser: IUser | null = null;
-	public form: IForm = { email: "", password: "" };
+	public form: IForm = { email: "", password: "", username: "" };
 	// 	private localstorage_key = "wallet-api_currentUser";
 
 	public setForm = (newEmail?: string, newPassword?: string) => {
@@ -29,14 +30,31 @@ export default class AuthStore {
 		makeAutoObservable(this);
 	}
 
-		public login = async () => {
-			try {
-				console.log(this.form)
-				// await authService.login(this.form.email, this.form.password);
-			} catch (e) {
-	            console.log(e)
-			} 
-		};
+	public resetForm = () => {
+		this.form.email = "";
+		this.form.password = "";
+	}
+
+	public login = async () => {
+		try {
+			console.log(this.form)
+			// await authService.login(this.form.email, this.form.password);
+		} catch (e) {
+			console.log(e)
+		}
+	};
+
+	public register = async () => {
+		try {
+			if (!this.form.username) {
+				throw new Error("Invalid data")
+			}
+			console.log(this.form)
+			// await authService.register(this.form.email, this.form.password);
+		} catch (e) {
+			console.log(e)
+		}
+	};
 
 	// 	public getCurrentnUser = async () => {
 	// 		const currentUserJson = this.getCurrentUserLocalStorage();
@@ -154,87 +172,22 @@ export default class AuthStore {
 	// 		}
 	// 	};
 
-	// 	public setToken = (token: string) => {
-	// 		runInAction(() => (this.receivedToken = token));
-	// 	};
+	// public setToken = (token: string) => {
+	// 	runInAction(() => (this.receivedToken = token));
+	// };
 
-	// 	public resetPassword = async (onSuccess: () => void, onError: (e: string) => void) => {
-	// 		this.form.fieldError.clearErrors();
 
-	// 		if (this.loader.isLoading) {
-	// 			return;
-	// 		}
 
-	// 		this.loader.start();
+	// public getCurrentUserLocalStorage = () => {
+	// 	const currentUserString = localStorage.getItem(this.localstorage_key);
+	// 	return currentUserString;
+	// };
 
-	// 		try {
-	// 			const data = this.form.getValues();
-	// 			if (data.newPassword !== data.confirmNewPassword) {
-	// 				this.form.fieldError.addError({
-	// 					message: strings.recoveryPage.samePasswordError,
-	// 					field: "password",
-	// 				});
-	// 				this.form.fieldError.addError({
-	// 					message: strings.recoveryPage.samePasswordError,
-	// 					field: "confirmNewPassword",
-	// 				});
-	// 			} else {
-	// 				await api.resetPassword(this.receivedToken, data.newPassword);
-	// 				runInAction(() => {
-	// 					data.password = data.newPassword;
-	// 				});
-	// 				this.login();
-	// 				this.clear();
-	// 				onSuccess();
-	// 			}
-	// 		} catch (e) {
-	// 			const error = JSON.parse(e.message);
-	// 			onError(error.message);
-	// 		} finally {
-	// 			this.loader.end();
-	// 		}
-	// 	};
+	// public saveOnLocalStorage = () => {
+	// 	localStorage.setItem(this.localstorage_key, JSON.stringify(this.currentUser));
+	// };
 
-	// 	public sendNewPassword = async (onSuccess: () => void, onError: (e: string) => void) => {
-	// 		this.form.fieldError.clearErrors();
-	// 		const data = this.form.getValues();
-	// 		this.loader.start();
-
-	// 		try {
-	// 			await api.sendRequestResetPassword(data.email);
-	// 			onSuccess();
-	// 		} catch (e) {
-	// 			const errors = Errors.handleError(e);
-	// 			this.form.fieldError.addError({
-	// 				message: errors,
-	// 				field: "email",
-	// 			});
-	// 			onError(e.message);
-	// 		} finally {
-	// 			this.loader.end();
-	// 		}
-	// 	};
-
-	// 	private clear = () => {
-	// 		const data = this.form.getValues();
-	// 		runInAction(() => {
-	// 			data.email = "";
-	// 			data.password = "";
-	// 			this.receivedToken = "";
-	// 			data.token = "";
-	// 		});
-	// 	};
-
-	// 	public getCurrentAdminUserLocalStorage = () => {
-	// 		const currentAdminUserString = localStorage.getItem(this.localstorage_key);
-	// 		return currentAdminUserString;
-	// 	};
-
-	// 	public saveOnLocalStorage = () => {
-	// 		localStorage.setItem(this.localstorage_key, JSON.stringify(this.currentAdminUser));
-	// 	};
-
-	// 	public removeFromLocalStorage = () => {
-	// 		localStorage.removeItem(this.localstorage_key);
-	// 	};
+	// public removeFromLocalStorage = () => {
+	// 	localStorage.removeItem(this.localstorage_key);
+	// };
 }
