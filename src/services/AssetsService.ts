@@ -15,7 +15,7 @@ export const createAsset = async(asset: ICreateAsset) => {
 
 export const getWalletAssets = async(walletId: number) => {
     try{
-        const response = await axios.get(baseUrl + `create-asset/${walletId}`)
+        const response = await axios.get(baseUrl + `get-assets-by-wallet/${walletId}`)
         return response.data;
     } catch (e){
         console.log(e);

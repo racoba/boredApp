@@ -4,20 +4,20 @@ import { ICreateWallet } from "@/models";
 
 const baseUrl = `${environment.baseUrl}wallets/`;
 
-export const createWallet = async(wallet: ICreateWallet) => {
-    try{
-        const response = await axios.post(baseUrl + "create-user-wallet", wallet)
+export const createUserWallet = async (wallet: ICreateWallet) => {
+    try {
+        const response = await axios.post(baseUrl + "create-wallet", wallet)
         return response.data;
-    } catch (e){
+    } catch (e) {
         console.log(e);
     }
 }
 
-export const getUserWallet = async(walletId: number) => {
-    try{
-        const response = await axios.get(baseUrl + `create-asset/${walletId}`)
+export const getUserWallet = async (walletId: number) => {
+    try {
+        const response = await axios.get(baseUrl + `get-user-wallet/${walletId}`)
         return response.data;
-    } catch (e){
+    } catch (e) {
         console.log(e);
     }
 }

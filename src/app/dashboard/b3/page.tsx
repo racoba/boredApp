@@ -1,5 +1,5 @@
 "use client"
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { Button, Grid } from "@mui/material";
 import { observer, useLocalObservable } from "mobx-react-lite";
 
@@ -9,11 +9,14 @@ import { AuthContext } from "@/context/AuthContext";
 
 const B3 = () => {
     const { user } = useContext(AuthContext);
-    const store = useLocalObservable(() => new Store(user?.id || -1, user?.walletId || -1));
+    const store = useLocalObservable(() => new Store());
 
-    React.useEffect(() => {
-        store.fetch()
-    }, [])
+    useEffect(() => {
+        if (user) {
+            store.userId = user?.id;
+            store.fetch(user.id);
+        }
+    }, [store.walletId])
 
     return (
         <Grid marginTop={2}>
@@ -24,7 +27,7 @@ const B3 = () => {
                 justifyContent="center"
                 spacing={4}
             >
-                {store.assets
+                {store.walletId
                     ?
                     store.assets.map((stock) => (
                         <Grid item>
@@ -34,7 +37,11 @@ const B3 = () => {
                     :
                     <Button
                         variant="contained"
-                        style={{ backgroundColor: "black", marginTop: 30 }} onClick={() => store.createWallet()}>Create Wallet</Button>}
+                        style={{ backgroundColor: "black", marginTop: 30 }}
+                        onClick={() => store.createUserWallet(user?.id)}
+                    >
+                        Create Wallet
+                    </Button>}
             </Grid>
         </Grid>
     )

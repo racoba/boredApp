@@ -14,6 +14,7 @@ type IAuthContext = {
   isAuthenticated: boolean;
   user: IUser | null;
   signIn: (data: SignInData) => Promise<void>;
+  setUser: (user: IUser | null) => void;
 }
 
 export const AuthContext = createContext({} as IAuthContext);
@@ -26,8 +27,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const { "walletadmin.token": token } = parseCookies();
 
-    if(token){
-      authService.validateToken(token).then((response) =>{
+    if (token) {
+      authService.validateToken(token).then((response) => {
         setUser(response.user)
       });
     };
@@ -42,20 +43,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (!response) {
       throw new Error("User not found")
     }
-    const { token, user } = response;
+    const { token, authUser } = response;
 
     setCookie(undefined, "walletadmin.token", token, {
       maxAge: 60 * 60 * 1, // 1 hour
     })
 
-    setUser(user);
-    
+    setUser(authUser);
+
     router.push("/dashboard");
 
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, user, signIn }}>
+    <AuthContext.Provider value={{ isAuthenticated, user, signIn, setUser }}>
       {children}
     </AuthContext.Provider>
   )

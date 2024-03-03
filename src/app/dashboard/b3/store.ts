@@ -6,21 +6,19 @@ import * as assetsService from "@/services/AssetsService";
 
 export default class Store {
 
-    public assets: IAsset[] | null = null;
+    public assets: IAsset[] = [];
 
-    private walletId: number;
-    private userId: number;
+    public walletId: number | null = null;
+    public userId: number | null = null;
 
-    constructor(userId: number, walletId: number) {
-        this.userId = userId;
-        this.walletId = walletId;
+    constructor() {
         makeAutoObservable(this);
     }
 
     public getWalletAssets = async () => {
         try {
-            if (this.walletId == -1) {
-                return;
+            if (this.walletId == null) {
+                throw new Error("Wallet not found")
             }
             const assets = await assetsService.getWalletAssets(this.walletId);
             this.assets = assets;
@@ -29,16 +27,33 @@ export default class Store {
         }
     }
 
-    public createWallet = async () => {
+    public createUserWallet = async (userId?: number) => {
         try {
-            await walletService.createWallet({ userId: this.userId })
+            if (!userId) {
+                throw new Error("User not logged");
+            }
+            const response = await walletService.createUserWallet({ userId })
+            this.walletId = response.walletId;
         } catch (e) {
             console.log(e);
         }
     }
 
-    public fetch = async () => {
-        console.log(this.assets)
-        await this.getWalletAssets();
+    public getUserWallet = async (userId: number) => {
+        try {
+            const wallet = await walletService.getUserWallet(userId)
+            this.walletId = wallet.id;
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    public fetch = async (userId: number) => {
+    if (!this.walletId) {
+            this.getUserWallet(userId);
+        }   
+        else {
+            // await this.getWalletAssets();
+        }
     }
 }

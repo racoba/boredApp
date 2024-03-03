@@ -11,7 +11,7 @@ type SignInData = {
 
 type LoginResponse = {
     token: string;
-    user: IUser;
+    authUser: IUser;
 }
 
 export const register = async (createdUser: ICreateUser) => {
