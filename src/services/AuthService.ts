@@ -40,7 +40,6 @@ export const validateToken = async (token: string): Promise<any> => {
                 "Authorization": token
             }
         };
-        console.log(config)
         const response = await axios.get(baseUrl + `validate-token`, config)
         return response.data
     } catch (e) {

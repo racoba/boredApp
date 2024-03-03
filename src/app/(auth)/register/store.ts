@@ -32,7 +32,6 @@ export default class Store {
                 throw new Error("Invalid data")
             }
 
-            console.log(this.form)
             await authService.register({
                 email: this.form.email,
                 password: this.form.password,
