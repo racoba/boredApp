@@ -2,15 +2,15 @@
 import { Box, Button, Grid, TextField } from "@mui/material";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { useRouter } from "next/navigation";
-import AuthStore from "@/stores/AuthStore";
+import Store from "./store";
 
 const Login = ({ children }: { children: React.ReactNode }) => {
 
-    const authStore = useLocalObservable(() => new AuthStore());
+    const store = useLocalObservable(() => new Store());
     const router = useRouter();
 
     const onClickRegister = async () => {
-        await authStore.register();
+        await store.register();
         router.push("/login");
     }
     const onClickBack = async () => {
@@ -38,8 +38,8 @@ const Login = ({ children }: { children: React.ReactNode }) => {
                     type="email"
                     label="Email"
                     variant="standard"
-                    value={authStore.form?.email}
-                    onChange={(e) => authStore.setForm(e.target.value, undefined)}
+                    value={store.form?.email}
+                    onChange={(e) => store.setForm(e.target.value, undefined)}
                     style={{ width: 400 }}
                 />
                 <TextField
@@ -47,8 +47,8 @@ const Login = ({ children }: { children: React.ReactNode }) => {
                     type="text"
                     label="Username"
                     variant="standard"
-                    value={authStore.form?.username}
-                    onChange={(e) => authStore.setForm(e.target.value, undefined)}
+                    value={store.form?.username}
+                    onChange={(e) => store.setForm(e.target.value, undefined)}
                     style={{ width: 400, marginTop: 15 }}
                 />
 
@@ -57,8 +57,8 @@ const Login = ({ children }: { children: React.ReactNode }) => {
                     type="password"
                     label="Password"
                     variant="standard"
-                    value={authStore.form?.password}
-                    onChange={(e) => authStore.setForm(undefined, e.target.value)}
+                    value={store.form?.password}
+                    onChange={(e) => store.setForm(undefined, e.target.value)}
                     style={{ width: 400, marginTop: 15 }}
                 />
                 <Box

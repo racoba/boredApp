@@ -1,19 +1,29 @@
 "use client"
+import { useContext } from "react";
 import { Box, Button, Grid, TextField } from "@mui/material";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { useRouter } from "next/navigation";
-import AuthStore from "@/stores/AuthStore";
 
-const Login = ({ children }: { children: React.ReactNode }) => {
+import { AuthContext } from "@/context/AuthContext";
+import Store from "./store";
 
-    const authStore = useLocalObservable(() => new AuthStore());
+type SignInData = {
+    email: string;
+    password: string;
+}
+
+const Login = () => {
+
+    const { signIn } = useContext(AuthContext)
+    const store = useLocalObservable(() => new Store());
     const router = useRouter();
 
-    const onClickLogin = async () => {
-        await authStore.login();
+    const onClickLogin = async (data: SignInData) => {
+        await signIn(data);
     }
+
     const onClickRegister = async () => {
-        authStore.resetForm();
+        store.resetForm();
         router.push("/register")
     }
 
@@ -38,8 +48,8 @@ const Login = ({ children }: { children: React.ReactNode }) => {
                     type="email"
                     label="Email"
                     variant="standard"
-                    value={authStore.form?.email}
-                    onChange={(e) => authStore.setForm(e.target.value, undefined)}
+                    value={store.form?.email}
+                    onChange={(e) => store.setForm(e.target.value, undefined)}
                     style={{ width: 400 }}
                 />
 
@@ -48,8 +58,8 @@ const Login = ({ children }: { children: React.ReactNode }) => {
                     type="password"
                     label="Password"
                     variant="standard"
-                    value={authStore.form?.password}
-                    onChange={(e) => authStore.setForm(undefined, e.target.value)}
+                    value={store.form?.password}
+                    onChange={(e) => store.setForm(undefined, e.target.value)}
                     style={{ width: 400, marginTop: 15 }}
                 />
                 <Box
@@ -66,7 +76,7 @@ const Login = ({ children }: { children: React.ReactNode }) => {
                         Register
                     </Button>
                     <Button
-                        onClick={() => onClickLogin()}
+                        onClick={() => onClickLogin({ email: store.form.email, password: store.form.password })}
                         variant="contained"
                         style={{ backgroundColor: "black", marginTop: 30 }}
                     >

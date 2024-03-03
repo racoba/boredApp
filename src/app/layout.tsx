@@ -1,4 +1,5 @@
 import React from "react"
+import { AuthProvider } from "@/context/AuthContext"
 
 export const metadata = {
   title: 'Next.js',
@@ -13,7 +14,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body style={{ minHeight: "100vh", backgroundColor: "#d1d0ca" }}>
-        {children}
+        <AuthProvider>
+          {children}
+        </AuthProvider>
       </body>
     </html>
   )
