@@ -1,28 +1,44 @@
+import { IAsset } from "@/models";
 import { makeAutoObservable } from "mobx";
+import * as walletService from "@/services/WalletService";
+import * as assetsService from "@/services/AssetsService";
 
-import strings from "@/resources/strings";
-import { getAsset } from "@/services/AssetsService";
 
 export default class Store {
 
-    public quotes: string[];
-    public assets: any[] | null = null
+    public assets: IAsset[] | null = null;
 
-    constructor(quotes: string[]) {
-        this.quotes = quotes;
+    private walletId: number;
+    private userId: number;
+
+    constructor(userId: number, walletId: number) {
+        this.userId = userId;
+        this.walletId = walletId;
         makeAutoObservable(this);
     }
 
-    public getAsset = async (quotes: string[]) => {
-        try{
-            this.assets = await getAsset(quotes);
-            console.log(this.assets);
-        } catch (e){
+    public getWalletAssets = async () => {
+        try {
+            if (this.walletId == -1) {
+                return;
+            }
+            const assets = await assetsService.getWalletAssets(this.walletId);
+            this.assets = assets;
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    public createWallet = async () => {
+        try {
+            await walletService.createWallet({ userId: this.userId })
+        } catch (e) {
             console.log(e);
         }
     }
 
     public fetch = async () => {
-        await this.getAsset(this.quotes);
+        console.log(this.assets)
+        await this.getWalletAssets();
     }
 }

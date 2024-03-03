@@ -3,6 +3,7 @@ import { createContext, useEffect, useState } from "react";
 import { setCookie, parseCookies } from "nookies";
 import { useRouter } from "next/navigation";
 import * as authService from "@/services/AuthService";
+import { IUser } from "@/models";
 
 type SignInData = {
   email: string;
@@ -11,23 +12,23 @@ type SignInData = {
 
 type IAuthContext = {
   isAuthenticated: boolean;
-  username: string | null;
+  user: IUser | null;
   signIn: (data: SignInData) => Promise<void>;
 }
 
 export const AuthContext = createContext({} as IAuthContext);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [username, setUsername] = useState<string | null>(null);
+  const [user, setUser] = useState<IUser | null>(null);
   const router = useRouter()
-  const isAuthenticated = !!username;
+  const isAuthenticated = !!user;
 
   useEffect(() => {
     const { "walletadmin.token": token } = parseCookies();
 
     if(token){
       authService.validateToken(token).then((response) =>{
-        setUsername(response.user.username)
+        setUser(response.user)
       });
     };
   }, [])
@@ -41,20 +42,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (!response) {
       throw new Error("User not found")
     }
-    const { token, username } = response;
+    const { token, user } = response;
 
     setCookie(undefined, "walletadmin.token", token, {
       maxAge: 60 * 60 * 1, // 1 hour
     })
 
-    setUsername(username);
+    setUser(user);
     
     router.push("/dashboard");
 
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, username, signIn }}>
+    <AuthContext.Provider value={{ isAuthenticated, user, signIn }}>
       {children}
     </AuthContext.Provider>
   )

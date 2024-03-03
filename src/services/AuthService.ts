@@ -1,6 +1,6 @@
 import axios from "axios";
 import { environment } from "../../environment";
-import { ICreateUser, IUserInfo } from "@/models";
+import { ICreateUser, IUser, IUserInfo } from "@/models";
 
 const baseUrl = `${environment.baseUrl}auth/`;
 
@@ -11,7 +11,7 @@ type SignInData = {
 
 type LoginResponse = {
     token: string;
-    username: string;
+    user: IUser;
 }
 
 export const register = async (createdUser: ICreateUser) => {

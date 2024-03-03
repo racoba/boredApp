@@ -5,7 +5,7 @@ import { parseCookies } from "nookies"
 import { useRouter } from "next/navigation";
 
 export default function Dashboard() {
-    const { username } = useContext(AuthContext);
+    const { user } = useContext(AuthContext);
     const router = useRouter()
     useEffect(()=>{
         const { ["walletadmin.token"]: token } = parseCookies();
@@ -16,7 +16,7 @@ export default function Dashboard() {
     },[])
 
     return (
-        <h1>Dashboard de {username}</h1>
+        <h1>Dashboard de {user?.username}</h1>
     )
 }
 
