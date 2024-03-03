@@ -35,7 +35,13 @@ export const login = async (data: SignInData): Promise<LoginResponse | null> => 
 
 export const validateToken = async (token: string): Promise<any> => {
     try {
-        const response = await axios.get<boolean>(baseUrl + `validate-token?token=${token}`)
+        const config = {
+            headers: {
+                "Authorization": token
+            }
+        };
+        console.log(config)
+        const response = await axios.get(baseUrl + `validate-token`, config)
         return response.data
     } catch (e) {
         console.log(e);
