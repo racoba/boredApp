@@ -3,17 +3,18 @@ import { AuthContext } from "@/context/AuthContext";
 import React, { useContext, useEffect } from "react";
 import { parseCookies } from "nookies"
 import { useRouter } from "next/navigation";
+import { observer } from "mobx-react-lite";
 
-export default function Dashboard() {
+const Dashboard = () => {
     const { user } = useContext(AuthContext);
     const router = useRouter()
-    useEffect(()=>{
+    useEffect(() => {
         const { ["walletadmin.token"]: token } = parseCookies();
 
-        if(!token){
+        if (!token) {
             router.back();
         }
-    },[])
+    }, [])
 
     return (
         <h1>Dashboard de {user?.username}</h1>
@@ -23,7 +24,7 @@ export default function Dashboard() {
 
 
 
-
+export default observer(Dashboard);
 
 
 

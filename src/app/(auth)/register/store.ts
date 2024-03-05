@@ -11,28 +11,23 @@ export default class Store {
 
     public form: IForm = { email: "", password: "", username: "" };
 
-    public setForm = (newEmail?: string, newPassword?: string, newUsername?: string) => {
-        if (newEmail) this.form.email = newEmail;
-        if (newPassword) this.form.password = newPassword;
-        if (newUsername) this.form.username = newUsername;
-    }
-
     constructor() {
         makeAutoObservable(this);
     }
 
-    public resetForm = () => {
-        this.form.email = "";
-        this.form.password = "";
+    public setForm = (newEmail?: string, newPassword?: string, newUsername?: string) => {
+        if (newEmail !== undefined || newEmail === "") this.form.email = newEmail;
+        if (newPassword !== undefined || newPassword === "") this.form.password = newPassword;
+        if (newUsername !== undefined || newUsername === "") this.form.username = newUsername;
     }
 
     public register = async () => {
         try {
-            if (!this.form.username) {
+            if (!this.form.username || !this.form.email || !this.form.password) {
                 throw new Error("Invalid data")
             }
 
-            await authService.register({
+            const newUser = await authService.register({
                 email: this.form.email,
                 password: this.form.password,
                 username: this.form.username

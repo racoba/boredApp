@@ -13,7 +13,7 @@ type SignInData = {
 type IAuthContext = {
   isAuthenticated: boolean;
   user: IUser | null;
-  signIn: (data: SignInData) => Promise<void>;
+  signIn: (data: SignInData, openSnackbar: (state: boolean) => void) => Promise<void>;
   setUser: (user: IUser | null) => void;
 }
 
@@ -25,6 +25,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const isAuthenticated = !!user;
 
   useEffect(() => {
+
     const { "walletadmin.token": token } = parseCookies();
 
     if (token) {
@@ -34,7 +35,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     };
   }, [])
 
-  async function signIn({ email, password }: SignInData) {
+  async function signIn({ email, password }: SignInData, openSnackbar: (state: boolean) => void) {
+
+    if (!email || !password) {
+      throw new Error("Missing Fields")
+    }
+
     const response = await authService.login({
       email,
       password
@@ -50,6 +56,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     })
 
     setUser(authUser);
+
+    openSnackbar(true);
 
     router.push("/dashboard");
 
