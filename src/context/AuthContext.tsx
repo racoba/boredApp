@@ -3,7 +3,8 @@ import { createContext, useEffect, useState } from "react";
 import { setCookie, parseCookies } from "nookies";
 import { useRouter } from "next/navigation";
 import * as authService from "@/services/AuthService";
-import { IUser } from "@/models";
+import * as walletService from "@/services/WalletService";
+import { IUser, IWallet } from "@/models";
 
 type SignInData = {
   email: string;
@@ -13,6 +14,7 @@ type SignInData = {
 type IAuthContext = {
   isAuthenticated: boolean;
   user: IUser | null;
+  userWallet: IWallet | null;
   signIn: (data: SignInData, openSnackbar: (state: boolean) => void) => Promise<void>;
   setUser: (user: IUser | null) => void;
 }
@@ -21,16 +23,16 @@ export const AuthContext = createContext({} as IAuthContext);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<IUser | null>(null);
+  const [userWallet, setUserWallet] = useState<IWallet | null>(null);
   const router = useRouter()
   const isAuthenticated = !!user;
 
   useEffect(() => {
 
     const { "walletadmin.token": token } = parseCookies();
-
     if (token) {
       authService.validateToken(token).then((response) => {
-        setUser(response.user)
+        setUser(response.user);
       });
     };
   }, [])
@@ -56,7 +58,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     })
 
     setUser(authUser);
-
+    if (userWallet) {
+      const wallet = await walletService.getUserWallet(authUser.id)
+      setUserWallet(wallet);
+    }
     openSnackbar(true);
 
     router.push("/dashboard");
@@ -64,7 +69,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, user, signIn, setUser }}>
+    <AuthContext.Provider value={{ isAuthenticated, user, userWallet, signIn, setUser }}>
       {children}
     </AuthContext.Provider>
   )

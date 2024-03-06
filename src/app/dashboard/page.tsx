@@ -6,18 +6,23 @@ import { useRouter } from "next/navigation";
 import { observer } from "mobx-react-lite";
 
 const Dashboard = () => {
-    const { user } = useContext(AuthContext);
+    const { user, userWallet } = useContext(AuthContext);
     const router = useRouter()
     useEffect(() => {
         const { ["walletadmin.token"]: token } = parseCookies();
-
+        console.log(userWallet)
         if (!token) {
             router.back();
         }
     }, [])
 
     return (
-        <h1>Dashboard de {user?.username}</h1>
+        <>
+            <h1>{user?.username} dashboard</h1>
+            {user?.walletId &&
+                <h2>You have {userWallet?.id} assets</h2>
+            }
+        </>
     )
 }
 

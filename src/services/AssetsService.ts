@@ -21,3 +21,14 @@ export const getWalletAssets = async(walletId: number) => {
         console.log(e);
     }
 }
+
+export const countUserWallets = async(walletId: number) => {
+    try{
+      console.log("oi")
+
+        const response = await axios.get(baseUrl + `count-wallet-assets/${walletId}`)
+        return response.data;
+    } catch (e){
+        console.log(e);
+    }
+}
