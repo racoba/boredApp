@@ -13,7 +13,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body style={{ minHeight: "100vh", backgroundColor: "#d1d0ca" }}>
+      <body style={{ minHeight: "100vh", backgroundColor: "#d1d0ca", margin: 0 }}>
         <AuthProvider>
           {children}
         </AuthProvider>

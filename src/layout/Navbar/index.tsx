@@ -19,7 +19,6 @@ export const Navbar = () => {
         bgcolor={black}
         height={60}
         alignItems="center"
-        
         >
             <Button onClick={toggleDrawer(true)}><MenuIcon style={{color: "white"}}/></Button>
             <NavbarContent isOpen={isOpen} setIsOpen={setIsOpen} />
