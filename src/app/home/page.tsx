@@ -24,6 +24,10 @@ const Home = () => {
         }
     }, [])
 
+    useEffect(()=>{
+        store.fetch();
+    }, [])
+
     const mockedData = [
         {
             title: "Titulo",
@@ -56,11 +60,19 @@ const Home = () => {
                     justifyContent="center"
                     spacing={12}
                 >
-                    {mockedData.map((stock) => (
+                    {store.currentTasks? store.currentTasks.map((task) => (
                         <Grid item>
-                            <TaskCard {...stock} />
+                            <TaskCard 
+                            onConfirm={()=> console.log("AA")}
+                            score={task.price}
+                            title={task.activity}
+                            imageUrl="" 
+                            />
                         </Grid>
-                    ))}
+                    ))
+                    :
+                    null
+                    }
                 </Grid>
                 <Button
                     style={{ marginTop: 20 }}
