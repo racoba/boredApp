@@ -5,12 +5,11 @@ import { parseCookies } from "nookies"
 import { useRouter } from "next/navigation";
 import { observer } from "mobx-react-lite";
 
-const Dashboard = () => {
-    const { user, userWallet } = useContext(AuthContext);
+const Home = () => {
+    const { user } = useContext(AuthContext);
     const router = useRouter()
     useEffect(() => {
-        const { ["walletadmin.token"]: token } = parseCookies();
-        console.log(userWallet)
+        const { ["boredApp.token"]: token } = parseCookies();
         if (!token) {
             router.back();
         }
@@ -18,10 +17,8 @@ const Dashboard = () => {
 
     return (
         <>
-            <h1>{user?.username} dashboard</h1>
-            {user?.walletId &&
-                <h2>You have {userWallet?.id} assets</h2>
-            }
+            <h1>{user?.username}</h1>
+            
         </>
     )
 }
@@ -29,7 +26,7 @@ const Dashboard = () => {
 
 
 
-export default observer(Dashboard);
+export default observer(Home);
 
 
 

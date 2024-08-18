@@ -2,13 +2,13 @@ export interface IUser {
     id: number;
     username: string;
     email: string;
-    walletId: number | null;
+    pictureUrl?: string;
 }
 
 export interface IUserInfo {
     username: string;
     email: string;
-    walletId?: number;
+    pictureUrl?: string;
 }
 
 export interface ICreateUser {

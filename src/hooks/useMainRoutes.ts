@@ -1,28 +1,28 @@
-import BusinessIcon from '@mui/icons-material/Business';
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import CurrencyBitcoinIcon from '@mui/icons-material/CurrencyBitcoin';
+import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
+import HomeIcon from '@mui/icons-material/Home';
+import HistoryIcon from '@mui/icons-material/History';
 
 const useMainRoutes = () => {
-    const createRoute = (path?: string) => `/dashboard/${path ? "/" + path : ""}`;
+    const createRoute = (path?: string) => `/home/${path ? "/" + path : ""}`;
 
-    const dashboardRoutes = [
+    const appRoutes = [
         {
-            text: "Dashboard",
-            icon: DashboardIcon,
+            text: "Home",
+            icon: HomeIcon,
             path: createRoute(),
         },
         {
-            text: "B3",
-            icon: BusinessIcon,
-            path: createRoute("b3"),
+            text: "Ranking",
+            icon: EmojiEventsIcon,
+            path: createRoute("ranking"),
         },
         {
-            text: "Crypto",
-            icon: CurrencyBitcoinIcon,
-            path: createRoute("crypto"),
+            text: "History",
+            icon: HistoryIcon,
+            path: createRoute("history"),
         }
     ]
-    return dashboardRoutes;
+    return appRoutes;
 }
 
 export default useMainRoutes();
