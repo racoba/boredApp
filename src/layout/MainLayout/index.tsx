@@ -9,7 +9,9 @@ export const MainLayout = observer(({ children }: { children: React.ReactNode })
     return (
         <Grid style={{}}>
             <Navbar />
-            {children}
+            <div style={{padding: "20px 10px"}}>
+                {children}
+            </div>
         </Grid>
     )
 })

@@ -1,4 +1,4 @@
-import "moment/locale/pt-br"
+// import "moment/locale/pt-br"
 import LocalizedStrings from "localized-strings"
 
 const strings = new LocalizedStrings({
@@ -34,16 +34,25 @@ const strings = new LocalizedStrings({
                 SE: "Sergipe",
                 TO: "Tocantins",
             },
+        },
         components:{
-
+            taskCard: {
+                points:(value: number) => `${value} pontos`,
+            }
         },
         pages: {
+            home:{
 
+            }
         },
         common:{
-
+            actions: {
+                accept: "Aceitar",
+                reject: "Recusar",
+                reroll: "Rodar novamente",
+            }
         }
     },
-}})
+})
 
 export default strings;
