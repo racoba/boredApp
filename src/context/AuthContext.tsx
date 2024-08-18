@@ -3,8 +3,7 @@ import { createContext, useEffect, useState } from "react";
 import { setCookie, parseCookies } from "nookies";
 import { useRouter } from "next/navigation";
 import * as authService from "@/services/AuthService";
-import * as walletService from "@/services/WalletService";
-import { IUser, IWallet } from "@/models";
+import { IUser } from "@/models";
 
 type SignInData = {
   email: string;
@@ -14,7 +13,6 @@ type SignInData = {
 type IAuthContext = {
   isAuthenticated: boolean;
   user: IUser | null;
-  userWallet: IWallet | null;
   signIn: (data: SignInData, openSnackbar: (state: boolean) => void) => Promise<void>;
   setUser: (user: IUser | null) => void;
 }
@@ -23,13 +21,12 @@ export const AuthContext = createContext({} as IAuthContext);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<IUser | null>(null);
-  const [userWallet, setUserWallet] = useState<IWallet | null>(null);
   const router = useRouter()
   const isAuthenticated = !!user;
 
   useEffect(() => {
 
-    const { "walletadmin.token": token } = parseCookies();
+    const { "boredApp.token": token } = parseCookies();
     if (token) {
       authService.validateToken(token).then((response) => {
         setUser(response.user);
@@ -53,23 +50,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
     const { token, authUser } = response;
 
-    setCookie(undefined, "walletadmin.token", token, {
+    setCookie(undefined, "boredApp.token", token, {
       maxAge: 60 * 60 * 1, // 1 hour
     })
 
     setUser(authUser);
-    if (userWallet) {
-      const wallet = await walletService.getUserWallet(authUser.id)
-      setUserWallet(wallet);
-    }
+    
     openSnackbar(true);
 
-    router.push("/dashboard");
+    router.push("/home");
 
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, user, userWallet, signIn, setUser }}>
+    <AuthContext.Provider value={{ isAuthenticated, user, signIn, setUser }}>
       {children}
     </AuthContext.Provider>
   )

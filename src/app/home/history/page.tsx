@@ -16,7 +16,7 @@ const mockedData = [
     },
 ]
 
-const Crypto = () => {
+const History = () => {
     return (
         <Grid marginTop={2}>
             <Grid
@@ -37,4 +37,4 @@ const Crypto = () => {
 }
 
 
-export default Crypto;
+export default History;
