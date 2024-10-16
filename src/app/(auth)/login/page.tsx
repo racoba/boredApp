@@ -1,6 +1,6 @@
 "use client"
 import { useContext, useState } from "react";
-import { Box, Button, FormControl, Grid, Snackbar, TextField } from "@mui/material";
+import { Box, FormControl, Grid, Snackbar } from "@mui/material";
 import { observer, useLocalObservable } from "mobx-react-lite";
 import { useRouter } from "next/navigation";
 
@@ -8,6 +8,7 @@ import { AuthContext } from "@/context/AuthContext";
 import Store from "./store";
 
 import Input from "@/components/Input";
+import Button from "@/components/Button"
 
 import './styles.scss'
 
@@ -69,14 +70,12 @@ const Login = () => {
                             />
 
                             <Input
-                                props={{}}
+                                
                                 required
                                 type="password"
                                 label="Password"
-                                variant="standard"
                                 value={store.form?.password}
                                 onChange={(e) => store.setForm(undefined, e.target.value)}
-                                style={{ width: "100%", marginTop: 15 }}
                             />
                             <Box
                                 display="flex"
@@ -86,17 +85,15 @@ const Login = () => {
                             >
                                 <Button
                                     onClick={() => onClickRegister()}
-                                    variant="outlined"
-                                    style={{ color: "black", borderColor: "black", marginTop: 30 }}
+                                    text="Register"
                                 >
-                                    Register
+                                    
                                 </Button>
                                 <Button
                                     onClick={() => onClickLogin({ email: store.form.email, password: store.form.password })}
-                                    variant="contained"
-                                    style={{ backgroundColor: "black", marginTop: 30 }}
+                                    text="Login"
                                 >
-                                    Login
+                                    
                                 </Button>
                             </Box>
                         </FormControl>
