@@ -1,0 +1,10 @@
+.input-container {
+    margin: 1rem 0 !important;
+    width: 100% !important;
+    transition: 0.3s ease;
+}
+
+.input-container:focus-within {
+    transform: scale(1.01);
+    border-color: black !important;
+}

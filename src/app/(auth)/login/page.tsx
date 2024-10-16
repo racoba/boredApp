@@ -7,6 +7,10 @@ import { useRouter } from "next/navigation";
 import { AuthContext } from "@/context/AuthContext";
 import Store from "./store";
 
+import Input from "@/components/Input";
+
+import './styles.scss'
+
 type SignInData = {
     email: string;
     password: string;
@@ -28,11 +32,11 @@ const Login = () => {
 
     const handleCloseSnackbar = (event: React.SyntheticEvent | Event, reason?: string) => {
         if (reason === 'clickaway') {
-          return;
+            return;
         }
-    
+
         setOpen(false);
-      };
+    };
 
     return (
         <>
@@ -53,18 +57,19 @@ const Login = () => {
                 >
                     LOGIN
                     <form onSubmit={() => onClickLogin({ email: store.form.email, password: store.form.password })}>
+
                         <FormControl style={{ display: "flex", alignItems: "center", justifyContent: "center", minWidth: 350 }}>
-                            <TextField
-                                required
+                            <Input
+                                required={true}
                                 type="email"
                                 label="Email"
-                                variant="standard"
                                 value={store.form?.email}
                                 onChange={(e) => store.setForm(e.target.value, undefined)}
-                                style={{ width: "100%" }}
+
                             />
 
-                            <TextField
+                            <Input
+                                props={{}}
                                 required
                                 type="password"
                                 label="Password"
